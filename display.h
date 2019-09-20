@@ -1,0 +1,2 @@
+void printintro();
+void printmenu();
