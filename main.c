@@ -35,7 +35,8 @@ int c1=0,c2=0,c3=0;
 void display_menu();
 void enter_arrivals();
 void enter_departures();
-
+void emergency_arrival();
+void display_list(int ch);
 int main()
 {
     int ch,ch1;
@@ -63,7 +64,7 @@ int main()
                 
                 break;
             case 2:
-                printf("Emergeny arrival\n");
+                emergency_arrival();
                 break;
             case 3:
                 printf("Emergency departure\n");
@@ -72,6 +73,9 @@ int main()
                 printf("Display schedule\n");
                 break;
             case 5:
+                display_list(1);
+                break;
+            case 6:
                 exit(0);
             default: printf("Invalid choice\n");
             
@@ -86,7 +90,7 @@ void display_menu()
 {
     printf("\n _______________FLIGHT MANAGEMENT SYSTEM__________________\n\n");
     printf("\n Enter your choice \n");
-    printf("\n 1. Enter flights data \n 2. Add emergency arrival \n 3. Add emergency departure \n 4. Display Schedule \n 5. Exit\n");
+    printf("\n 1. Enter flights data \n 2. Add emergency arrival \n 3. Add emergency departure \n 4. Display Schedule \n 5.Display Arrivals \n 6. Exit\n");
 }
 
 void enter_arrivals()
@@ -106,7 +110,7 @@ void enter_arrivals()
         printf("\nAirline \t Number \t Arrival Time \t Origin \n");
         scanf("%s",arrivals[rear1].airline);
         scanf("%s",arrivals[rear1].number);
-        scanf("%d",&arrivals[rear1].scheduled_time);
+        scanf("%d",&arrivals[rear1].expected_time);
         scanf("%s",arrivals[rear1].city);
 
 
@@ -146,4 +150,76 @@ void enter_departures()
     }
     c2+=n2;
     printf("Arrival Data Saved\n");
+}
+
+
+void emergency_arrival()
+{
+    FLIGHT arrival;
+    int j,time;
+    printf("\nEnter emergency flight data : \n");
+    printf("\n Airline \t Number \t Arrival Time \t Source \n ");
+    scanf("%s %s %d %s",arrival.airline, arrival.number,&arrival.expected_time,arrival.city);
+    arrival.scheduled_time = arrival.expected_time;
+    j=rear1;
+    time = arrival.expected_time;
+    while(j>=00 && time<arrivals[j].scheduled_time)
+    {
+        arrivals[j+1] =  arrivals[j];
+        j--;
+    }
+    arrivals[j+1] = arrival;
+    rear1++;
+    c1++; 
+    printf("Emergency arrival added\n");
+}
+
+
+void display_list(int ch)
+{
+    int front,rear,i;
+    // 1 for arrivals ,2 for departures , 3 for all 
+    if(ch==1)
+    {
+        front=front1;
+        rear=rear1;
+        if(front>rear)
+        {
+            printf("\nNo flight in list\n");
+            return;
+        }
+        for(i=front;i<=rear;i++)
+        {
+            printf("\n%s \t%s \t%d \t%s\n",arrivals[i].airline,arrivals[i].number, arrivals[i].scheduled_time , arrivals[i].city);
+
+        }
+    }
+    else if (ch==2)
+    {
+        front=front2;
+        rear=rear2;
+        if(front>rear)
+        {
+            printf("\nNo flight in list\n");
+            return;
+        }
+        for(i=front;i<=rear;i++)
+        {
+            printf("\n%s \t%s \t%d \t%s\n",departures[i].airline,departures[i].number, departures[i].scheduled_time , departures[i].city);
+
+        }
+    }
+    else 
+    {
+        if(c3==0)
+        {
+            printf("No flights in Schedule\n");
+            return;
+        }
+        for(i=0;i<n3;i++)
+        {
+            printf("\n%d\t%s \t%s \t%d \t%s\n",i+1,schedule[i].airline,schedule[i].number, schedule[i].scheduled_time , schedule[i].city);
+        }
+
+    }
 }
