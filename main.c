@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #define MAX_SIZE 50
-#define MAX_TIME 10
-
+#define MAX_TIME 30
+#define START_TIME 0000
 //structres
 struct flight {
     char airline[10];
@@ -24,6 +24,7 @@ FLIGHT departures[MAX_SIZE];
 FLIGHT schedule[2*MAX_SIZE];
 
 //variables corresponding to above queues
+// 1 for arrivals, 2 for departures , 3 for all
 int n1,n2,n3;
 int front1=0,front2=0;
 int rear1=-1,rear2=-1;
@@ -36,6 +37,8 @@ void display_menu();
 void enter_arrivals();
 void enter_departures();
 void emergency_arrival();
+void emergency_departure();
+void schedule_flights();
 void display_list(int ch);
 int main()
 {
@@ -67,15 +70,19 @@ int main()
                 emergency_arrival();
                 break;
             case 3:
-                printf("Emergency departure\n");
+                emergency_departure();
                 break;
             case 4:
-                printf("Display schedule\n");
+                schedule_flights();
+                display_list(3);
                 break;
             case 5:
                 display_list(1);
                 break;
             case 6:
+                display_list(2);
+                break;
+            case 7:
                 exit(0);
             default: printf("Invalid choice\n");
             
@@ -90,7 +97,7 @@ void display_menu()
 {
     printf("\n _______________FLIGHT MANAGEMENT SYSTEM__________________\n\n");
     printf("\n Enter your choice \n");
-    printf("\n 1. Enter flights data \n 2. Add emergency arrival \n 3. Add emergency departure \n 4. Display Schedule \n 5.Display Arrivals \n 6. Exit\n");
+    printf("\n 1. Enter flights data \n 2. Add emergency arrival \n 3. Add emergency departure \n 4. Display Schedule \n 5.Display Arrivals \n 6.Display Departures \n 7. Exit\n");
 }
 
 void enter_arrivals()
@@ -140,7 +147,7 @@ void enter_departures()
         printf("\nAirline \t Number \t Departure Time \t Destination \n");
         scanf("%s",departures[rear2].airline);
         scanf("%s",departures[rear2].number);
-        scanf("%d",&departures[rear2].scheduled_time);
+        scanf("%d",&departures[rear2].expected_time);
         scanf("%s",departures[rear2].city);
 
 
@@ -163,7 +170,7 @@ void emergency_arrival()
     arrival.scheduled_time = arrival.expected_time;
     j=rear1;
     time = arrival.expected_time;
-    while(j>=00 && time<arrivals[j].scheduled_time)
+    while(j>=0 && time<arrivals[j].scheduled_time)
     {
         arrivals[j+1] =  arrivals[j];
         j--;
@@ -172,6 +179,27 @@ void emergency_arrival()
     rear1++;
     c1++; 
     printf("Emergency arrival added\n");
+}
+
+void emergency_departure()
+{
+    FLIGHT departure;
+    int j,time;
+    printf("\nEnter emergency flight data : \n");
+    printf("\n Airline \t Number \t Departure Time \t Destination \n ");
+    scanf("%s %s %d %s",departure.airline, departure.number,&departure.expected_time,departure.city);
+    departure.scheduled_time = departure.expected_time;
+    j=rear1;
+    time = departure.expected_time;
+    while(j>=0 && time<departures[j].scheduled_time)
+    {
+        departures[j+1] =  departures[j];
+        j--;
+    }
+    departures[j+1] = departure;
+    rear2++;
+    c2++; 
+    printf("Emergency departure added\n");
 }
 
 
@@ -190,7 +218,7 @@ void display_list(int ch)
         }
         for(i=front;i<=rear;i++)
         {
-            printf("\n%s \t%s \t%d \t%s\n",arrivals[i].airline,arrivals[i].number, arrivals[i].scheduled_time , arrivals[i].city);
+            printf("\n%s\t%s\t%d\t%s\n",arrivals[i].airline,arrivals[i].number, arrivals[i].scheduled_time , arrivals[i].city);
 
         }
     }
@@ -205,7 +233,7 @@ void display_list(int ch)
         }
         for(i=front;i<=rear;i++)
         {
-            printf("\n%s \t%s \t%d \t%s\n",departures[i].airline,departures[i].number, departures[i].scheduled_time , departures[i].city);
+            printf("\n%s\t%s\t%d\t%s\n",departures[i].airline,departures[i].number, departures[i].scheduled_time , departures[i].city);
 
         }
     }
@@ -216,10 +244,89 @@ void display_list(int ch)
             printf("No flights in Schedule\n");
             return;
         }
-        for(i=0;i<n3;i++)
+        for(i=0;i<c3;i++)
         {
-            printf("\n%d\t%s \t%s \t%d \t%s\n",i+1,schedule[i].airline,schedule[i].number, schedule[i].scheduled_time , schedule[i].city);
+            printf("\n%d\t%s\t%s\t%d\t%s\n",i+1,schedule[i].airline,schedule[i].number, schedule[i].scheduled_time , schedule[i].city);
         }
 
+    }
+}
+
+
+void schedule_flights()
+{
+    c3=0;
+    int i = 0 ;
+    // variables to iterate over the queues
+    int f1 = front1, r1 = rear1 , f2 = front2 , r2 = rear2;
+    //last flight operation set to negative initially
+    int last_flight = -MAX_TIME;
+
+    //while both arrivals and arrivals are present
+    while( f1 <= r1 && f2<= r2)
+    {
+
+        // arrival is expected first
+        if(arrivals[f1].scheduled_time < departures[f2].scheduled_time)
+        {
+
+            // theres enough time for flight arrival after previous time;
+            if(arrivals[f1].scheduled_time - last_flight > MAX_TIME)
+            {
+                schedule[i++] = arrivals[f1];
+                last_flight =  arrivals[f1].scheduled_time;
+                f1++;
+                c3++;
+            }
+            else
+            {
+                // arrival of next flight needs more time
+                arrivals[f1].scheduled_time = (arrivals[f1].scheduled_time + MAX_TIME);
+            }
+            
+        }
+        else 
+        {
+
+            // if departure will lead to delay in next arrival, delay the departure itself
+            if( (arrivals[f1].scheduled_time - departures[f2].scheduled_time)<MAX_TIME)
+            {
+                departures[f2].scheduled_time = (departures[f2].scheduled_time + MAX_TIME);
+            }
+            else
+            {
+                schedule[i++] = departures[f2];
+                f2++;
+                c3++;
+            }
+        }  
+    }
+
+    while(f1<=r1)
+    {
+        if(arrivals[f1].scheduled_time - last_flight < MAX_TIME)
+        {
+            arrivals[f1].scheduled_time = (arrivals[f1].scheduled_time + MAX_TIME);
+        }
+        else
+        {
+            schedule[i++] = arrivals[f1];
+            f1++;
+            c3++;
+        }
+    }
+
+    while(f2<=r2)
+    {
+        if(departures[f2].scheduled_time - last_flight < MAX_TIME)
+        {
+            departures[f2].scheduled_time = (departures[f2].scheduled_time + MAX_TIME);
+        }
+        else
+        {
+            schedule[i++] = departures[f2];
+            f2++;
+            c3++;
+        }
     }
 }
