@@ -246,7 +246,15 @@ void display_list(int ch)
         }
         for(i=0;i<c3;i++)
         {
-            printf("\n%d\t%s\t%s\t%d\t%s\n",i+1,schedule[i].airline,schedule[i].number, schedule[i].scheduled_time , schedule[i].city);
+
+            //convert minutes from 0000 into hours and minutes
+            int hours = (schedule[i].scheduled_time / 100);
+            int mins = (schedule[i].scheduled_time%100);
+            if(mins>60){
+                mins=mins-60;
+                hours++;
+            }
+            printf("\n%d\t%s\t%s\t%d:%d\t%s\n",i+1,schedule[i].airline,schedule[i].number, hours,mins , schedule[i].city);
         }
 
     }
@@ -301,6 +309,8 @@ void schedule_flights()
             }
         }  
     }
+
+
 
     while(f1<=r1)
     {
