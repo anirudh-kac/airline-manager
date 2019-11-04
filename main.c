@@ -130,7 +130,7 @@ void enter_arrivals()
 
 
         arrivals[rear1].scheduled_time = arrivals[rear1].expected_time;
-        strcpy("Arriving",arrivals[rear1].type)
+        strcpy("Arriving",arrivals[rear1].type);
 
 
         printf("\n____________________________________________________\n");
@@ -163,7 +163,7 @@ void enter_departures()
 
 
         departures[rear2].scheduled_time = departures[rear2].expected_time;
-        strcpy("Departing",departures[rear2].type)
+        strcpy("Departing",departures[rear2].type);
 
         printf("\n____________________________________________________\n");
     }
