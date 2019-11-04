@@ -13,7 +13,7 @@ struct flight {
     int expected_time;
     int scheduled_time;
     char city[10];
-    char type[10]; // Arriving or departing
+    char type; // Arriving or departing 'A' / 'D'
 };
 
 typedef struct flight FLIGHT;
@@ -130,7 +130,7 @@ void enter_arrivals()
 
 
         arrivals[rear1].scheduled_time = arrivals[rear1].expected_time;
-        strcpy("Arriving",arrivals[rear1].type);
+        arrivals[rear1].type = 'A';
 
 
         printf("\n____________________________________________________\n");
@@ -163,7 +163,8 @@ void enter_departures()
 
 
         departures[rear2].scheduled_time = departures[rear2].expected_time;
-        strcpy("Departing",departures[rear2].type);
+        departures[rear2].type = 'D';
+      
 
         printf("\n____________________________________________________\n");
     }
@@ -185,7 +186,7 @@ void emergency_arrival()
 
 
     arrival.scheduled_time = arrival.expected_time;
-    strcpy("Arriving",arrival.type);
+    arrival.type= 'A';
 
     j=rear1;
     time = arrival.expected_time;
@@ -214,7 +215,7 @@ void emergency_departure()
     scanf("%s %s %d %s",departure.airline, departure.number,&departure.expected_time,departure.city);
 
     departure.scheduled_time = departure.expected_time;
-    strcpy("Departing",departure.type);
+    departure.type = 'D';
     j=rear1;
     time = departure.expected_time;
     while(j>=0 && time<departures[j].scheduled_time)
@@ -247,7 +248,7 @@ void display_list(int ch)
         printf("\n AIRLINE \t NUMBER \t ARRIVAL TIME \t ORIGIN \n ");
         for(i=front;i<=rear;i++)
         {
-            printf("\n%s\t%s\t%d\t%s\n",arrivals[i].airline,arrivals[i].number, arrivals[i].scheduled_time , arrivals[i].city);
+            printf("\n%s    \t   %s   \t   %d   \t   %s\n",arrivals[i].airline,arrivals[i].number, arrivals[i].scheduled_time , arrivals[i].city);
 
         }
     }
@@ -263,7 +264,7 @@ void display_list(int ch)
         printf("\n AIRLINE \t NUMBER \t DEPARTURE TIME \t DESTINATION \n ");
         for(i=front;i<=rear;i++)
         {
-            printf("\n%s\t%s\t%d\t%s\n",departures[i].airline,departures[i].number, departures[i].scheduled_time , departures[i].city);
+            printf("\n%s   \t   %s   \t%d   \t   %s\n",departures[i].airline,departures[i].number, departures[i].scheduled_time , departures[i].city);
 
         }
     }
@@ -274,7 +275,7 @@ void display_list(int ch)
             printf("No flights in Schedule\n");
             return;
         }
-        printf("\n S.NO \t AIRLINE \t NUMBER \t \t A/D  \t   TIME   \t CITY \n ");
+        printf("\nS.NO \t AIRLINE \t NUMBER \t \t A/D  \t   TIME   \t CITY \n ");
         for(i=0;i<c3;i++)
         {
 
@@ -285,7 +286,7 @@ void display_list(int ch)
             //     mins=mins-60;
             //     hours++;
             // }
-            printf("\n%d\t%s\t%s\t%s\t%d\t%s\n",i+1, schedule[i].airline, schedule[i].number, schedule[i].type, schedule[i].scheduled_time, schedule[i].city);
+            printf("\n%d   \t   %s   \t   %s   \t    %c    \t   %d   \t  %s\n",i+1, schedule[i].airline, schedule[i].number, schedule[i].type, schedule[i].scheduled_time, schedule[i].city);
         }
 
     }
