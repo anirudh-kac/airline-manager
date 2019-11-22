@@ -110,7 +110,7 @@ void display_menu()
 {
     printf("\n _______________FLIGHT MANAGEMENT SYSTEM__________________\n\n");
     printf("\n Enter your choice \n");
-    printf("\n 1. Enter flights data \n 2. Add emergency arrival \n 3. Add emergency departure \n 4. Display Schedule \n 5.Display Arrivals \n 6.Display Departures \n 7. Exit\n");
+    printf("\n 1. Enter flights data \n 2. Add emergency arrival \n 3. Add emergency departure \n 4. Display Schedule \n 5. Display Arrivals \n 6. Display Departures \n 7. Exit\n");
 }
 
 void enter_arrivals()
@@ -257,7 +257,7 @@ void display_list(int ch)
         printf("\n AIRLINE \t NUMBER \t ARRIVAL TIME \t ORIGIN \n ");
         for(i=front;i<=rear;i++)
         {
-            printf("\n%s    \t   %s   \t   %d:%d   \t   %s\n",arrivals[i].airline,arrivals[i].number, min_to_hh(arrivals[i].scheduled_time),  min_to_mm(arrivals[i].scheduled_time), arrivals[i].city);
+            printf("\n     %s    \t   %s   \t   %d:%d   \t   %s    \n",arrivals[i].airline,arrivals[i].number, min_to_hh(arrivals[i].scheduled_time),  min_to_mm(arrivals[i].scheduled_time), arrivals[i].city);
 
         }
     }
@@ -273,7 +273,7 @@ void display_list(int ch)
         printf("\n AIRLINE \t NUMBER \t DEPARTURE TIME \t DESTINATION \n ");
         for(i=front;i<=rear;i++)
         {
-            printf("\n%s   \t   %s   \t%d:%d   \t   %s\n",departures[i].airline,departures[i].number,min_to_hh(departures[i].scheduled_time),min_to_mm(departures[i].scheduled_time) , departures[i].city);
+            printf("\n    %s   \t   %s   \t     %d:%d    \t   %s\n",departures[i].airline,departures[i].number,min_to_hh(departures[i].scheduled_time),min_to_mm(departures[i].scheduled_time) , departures[i].city);
 
         }
     }
