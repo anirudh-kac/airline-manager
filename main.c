@@ -304,82 +304,80 @@ void schedule_flights()
     //last flight operation set to negative initially
     int last_flight = -MAX_TIME;
 
-    //while both arrivals and arrivals are present
-    while( f1 <= r1 && f2<= r2)
+    // both arrivals and departures are present
+    while(f1<=r1 && f2<=r2)
     {
-
-        // arrival is expected first
-        if(arrivals[f1].scheduled_time < departures[f2].scheduled_time)
+        // if arrival has to proceed
+        if(arrivals[f1].scheduled_time<=departures[f2].scheduled_time)
         {
-
-            // theres enough time for flight arrival after previous time;
-            if(arrivals[f1].scheduled_time - last_flight > MAX_TIME)
+            // if arrival needs extra time
+            if(arrivals[f1].scheduled_time-last_flight < MAX_TIME)
             {
-                schedule[i++] = arrivals[f1];
-                last_flight =  arrivals[f1].scheduled_time;
-                f1++;
-                c3++;
+                arrivals[f1].scheduled_time += MAX_TIME;
+                departures[f2].scheduled_time+=MAX_TIME;
             }
             else
             {
-                // arrival of next flight needs more time
-                arrivals[f1].scheduled_time = (arrivals[f1].scheduled_time + MAX_TIME);
+                schedule[c3++]=arrivals[f1];
+                last_flight=arrivals[f1].scheduled_time;
+                f1++;
             }
             
         }
-        else 
+        else
         {
 
-            // if departure will lead to delay in next arrival, delay the departure itself
-            // the time between departure and next arrival is less than MAX TIME
-
-            if( (arrivals[f1].scheduled_time - departures[f2].scheduled_time)<MAX_TIME)
+            //if departure will affect next arrival, departing flight is delayed
+            if(arrivals[f1].scheduled_time - departures[f2].scheduled_time < MAX_TIME)
             {
-                departures[f2].scheduled_time = (departures[f2].scheduled_time + MAX_TIME);
+                departures[f2].scheduled_time+=MAX_TIME;
             }
             else
             {
-                schedule[i++] = departures[f2];
+                schedule[c3++]=departures[f2];
+                last_flight=departures[f2].scheduled_time;
                 f2++;
-                c3++;
             }
-        }  
+            
+        }
+        
+
     }
 
-
-
-// If arrivals are still left
+    // arrivals still left
     while(f1<=r1)
     {
-        // gap is less than MAX_TIME
-        if(arrivals[f1].scheduled_time - last_flight < MAX_TIME)
+        // if time between consecutive flights is less
+        if(arrivals[f1].scheduled_time-last_flight<MAX_TIME)
         {
-            arrivals[f1].scheduled_time = (arrivals[f1].scheduled_time + MAX_TIME);
+            arrivals[f1].scheduled_time+=MAX_TIME;
         }
         else
         {
-            schedule[i++] = arrivals[f1];
+            schedule[c3++]=arrivals[f1];
+            last_flight=arrivals[f1].scheduled_time;
             f1++;
-            c3++;
         }
+        
     }
 
-// Departures are still left
+    //departures are left
+
     while(f2<=r2)
     {
-
-        //gap between departures is less than MAX_TIME
-        if(departures[f2].scheduled_time - last_flight < MAX_TIME)
+        if(departures[f2].scheduled_time-last_flight<MAX_TIME)
         {
-            departures[f2].scheduled_time = (departures[f2].scheduled_time + MAX_TIME);
+            departures[f2].scheduled_time+=MAX_TIME;
         }
         else
         {
-            schedule[i++] = departures[f2];
+            schedule[c3++]=departures[f2];
+            last_flight=departures[f2].scheduled_time;
             f2++;
-            c3++;
         }
+        
     }
+
 }
 
 
