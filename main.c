@@ -257,7 +257,7 @@ void display_list(int ch)
         printf("\n AIRLINE \t NUMBER \t ARRIVAL TIME \t ORIGIN \n ");
         for(i=front;i<=rear;i++)
         {
-            printf("\n     %s    \t   %s   \t   %d:%d   \t   %s    \n",arrivals[i].airline,arrivals[i].number, min_to_hh(arrivals[i].scheduled_time),  min_to_mm(arrivals[i].scheduled_time), arrivals[i].city);
+            printf("\n    %s   \t   %s   \t     %d:%d    \t   %s\n",arrivals[i].airline,arrivals[i].number, min_to_hh(arrivals[i].scheduled_time),  min_to_mm(arrivals[i].scheduled_time), arrivals[i].city);
 
         }
     }

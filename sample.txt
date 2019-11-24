@@ -1,0 +1,27 @@
+SET 1:
+
+Indigo            6E477    0600         DEL
+Vistara           VJ441    0645         CJI
+AirAsia           AA113    0835         SXR 
+Indigo            6E433    0850         CCU
+AirIndia          AI223    1230         BOM 
+Vistara           VJ991    1240         ATQ
+AirAsia           AA366    1255         DEL
+AirIndia          AI214    1345         SXR 
+Indigo            6E4711   1400         IXJ 
+AirIndia          AI290    1420         SXR 
+
+
+
+SET 2:
+
+AirIndia          AI443    0815         CNI
+AirAsia           AA333    0920         BLR
+Vistara           VJ1211   1120         DEL 
+Indigo            6E344    1210         DEL 
+AirAsia           AA123    1250         GUW
+AirIndia          AI263    1320         BLR 
+Vistara           VJ1211   1410         DEL
+AirIndia          AI723    1440         GOP 
+Indigo            6E133    1500         BOM 
+AirAsia           AA343    1510         BLR
